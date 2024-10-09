@@ -1,0 +1,227 @@
+---
+title: "AM Lab1 startLearn Test Answers"
+author: "Andrew McCoy"
+date: "2024-10-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Beginner Test
+```{r, include =FALSE}
+
+data(mtcars)
+data(trees)
+data(precip)
+
+head(mtcars)
+
+tail(trees)
+
+head(precip)
+```
+### Question 1
+```{r}
+class(mtcars)
+
+#mtcars is a dataframe, and I used the class() function to test this.
+```
+### Question 2
+```{r}
+is.vector(precip)
+#using the is.vector function allows me to determinine that precip is in fact a vector.
+```
+### Question 3
+```{r}
+treesmatrix <- matrix(trees)
+class(treesmatrix)
+#The matrix function alters the dataframe into a matrix.
+```
+### Question 4
+```{r}
+precip[14]
+#This displays the 14th city in the list, but not the amount of precipitation
+```
+### Question 5
+```{r}
+alltogether <-c(mtcars, trees, precip)
+class(alltogether)
+#This combines the dataframe and matrices into one consolidated into one list
+```
+### Question 6
+```{r}
+is.numeric(precip)
+#This function tests this parameter and yielded a true result
+```
+### Question 7
+```{r}
+mtcars[2,7] #Looks for this one point in the dataframe
+
+mtcars["Mazda RX4 Wag",7] #Looks at "Mazda RX4 Wag" row, and finds entry 7
+
+mtcars["Mazda RX4 Wag","qsec"] #Finds intersection of these two terms
+
+mtcars[,"qsec"][2] #Finds the column "qsec" and finds the second row
+```
+### Question 8
+```{r}
+precip[c("Juneau","Phoenix","Sacramento")]<-c(23,46,12)
+#precip[] lets me search the vector. Using the c() function allows for me to call specifically the 3 cities and then replace them while maintaining the integrity of the vector. 
+```
+### Question 9
+```{r}
+any(trees$Girth>trees$Volume)
+#No there are not, and by using this function I can yield a signle output return, you can also determine this by just including this "trees$Girth>trees$Volume" But the code returns a respons for every value
+```
+### Question 10
+```{r}
+A<-sum(trees$Height) #Sums entire column
+B<-sum(mtcars["Valiant",]) #Sums entire row
+C<-sum(precip[1:8])
+
+(C/B)+A
+```
+________________
+## Intermediate Test
+```{r,include=FALSE}
+set.seed(541)
+
+MatrixElements<-sample(c(TRUE,FALSE),size = 96, replace = TRUE)
+
+MyMatrix<-array(data = MatrixElements, dim = c(8,12))
+MyMatrix
+```
+### Section 1, Question 1
+```{r}
+#It allows for the numbers being pulled from the seed sample to be reused. In this case it allows for a larger matrix to be generated than existed before the generation of MatrixElements 
+```
+### Section 1, Question 2
+```{r}
+MyMatrix*1
+#Multiplying by 1 converts logical arguments to numerical ones (I don't really know why if I'm honest)
+```
+### Section 1, Question 3
+```{r}
+apply(MyMatrix,1,all)
+#the apply function arguments select the object being operated on, if rows or columns or both are being observed (1 being columns), and the all function looks to see if all values are the same in the matrix
+```
+
+```{r,include=FALSE}
+set.seed(154)
+#Seed 154 is different than answer key
+MatrixElements<-sample(c(1,2,3,4,5,6,7,8,9,10), size = 96,replace = TRUE)
+MyMatrix<-matrix(MatrixElements,8,12)
+
+MyMatrix
+```
+### Section 2, Question 1
+```{r}
+length(MyMatrix[which(MyMatrix==7)])
+#The nested function finds all values of 7 in the matrix and puts them into a list (maybe not the R list, but a list), and the length function tells me how many values are in that list
+```
+### Section 2, Question 2
+```{r}
+apply(MyMatrix,1,sum)
+#As in Section 1 Question 3, this determines the sum of each column
+```
+### Section 2, Question 3
+```{r}
+apply(MyMatrix, 1, prod)
+#Same as last question, except the product argument was selected instead of sum
+```
+### Section 2, Question 4
+```{r}
+MyMatrix[which(MyMatrix==10)]<-12
+#This selects each part of the matrix that is equal to exaclty 10, and replaces it with the value 12
+```
+### Section 2, Question 5
+```{r}
+length(which(MyMatrix > 3 | MyMatrix < 8))
+#which() selects for each value that meets the argument, the | symbol acts as an "and" argument, and length summarizes how many values were reported
+```
+### Section 2, Question 6
+```{r}
+MyDataframe <- data.frame(MyMatrix)
+#Only dataframes can hold both types of data
+
+MyDataframe<- as(MyDataframe[,12], "character")
+#This action alters the 12th row into character data
+```
+### Section 2, Question 7
+```{r}
+SumColumn<-apply(MyMatrix,1,sum)
+#This gets the row summary
+
+SumColumn<-SumColumn>70
+#This alters the summary matrix into a true or false response based on if it is >70 or not
+
+NewMyMatrix<-MyMatrix
+NewMyMatrix<-data.frame(NewMyMatrix)
+#New matrix has to be a dataframe to store both logical and numerical information
+
+NewMyMatrix$SumAboveSeventy<-SumColumn
+#Generates a new column which has the true or false arguments attached to the correct rows
+```
+________________
+## Advanced Test
+```{r}
+HelloWorld <- print("Hello, World.")
+HelloWorld
+```
+### Question 1
+```{r}
+iris<-iris
+SpeciesFunction<-function(iris) {
+  Setosa<-iris[which(iris[,"Species"]=="setosa"),]
+  Virginica<-iris[which(iris[,"Species"]=="virginica"),]
+  Versicolor<-iris[which(iris[,"Species"]=="versicolor"),]
+  return(list(Setosa,Virginica,Versicolor))
+}
+
+#ListSpecies<-SpeciesFunction(iris)
+
+
+
+#The function() allows for multiple operations to happen (?), which lets me combine these 3 which() arguments into one "Mother" function. The return causes it to become an object. I can't get it to return setosa for some reason
+```
+### Question 2
+```{r}
+Question2<-function(iris){
+  if(iris$Sepal.Width>3.1)
+    return(iris$Sepal.Length+iris$Petal.Length)
+  else if(iris$Sepal.Width<3.1)
+    return(iris$Sepal.Length-iris$Petal.Length)
+}
+
+#for(i in 1:nrows){
+#  if(iris$sepal.width[i] > 3.1) {
+#    iris$sepal.legth[i] + ir$petal.length[i]->temp
+#     temp->sepal[i]}
+#  if(iris$sepal.width[i] < 3.1) {
+#    iris$sepal.legth[i] - ir$petal.length[i]->temp
+#    temp->sepal[i]}  
+#  }
+
+#For this one I can't figure out how to get the result to print as more than just a function, as well as how to make it select by row in its current format.
+```
+### Question 3
+```{r}
+mtcars
+findMPG<-function(NumCylinders) {
+  CylinderSubset<-mtcars[which(mtcars[,"cyl"]==NumCylinders),]
+  Answer<-mean(CylinderSubset[,"mpg"])
+  return(Answer)
+  }
+#This is the key code, and it does not yield the output it should. Between this and the instructions I can not determine how to do this. I have started to google around but its going badly
+```
+### Question 4
+```{r}
+#How do I build a matrix and why is that preferable to a different function?
+#How was I supposed to know it needed 6 columns
+#What is the function command actually doing for these questions? Is it just needed to set up a multi-argument piece of code or is it also performing an operation?
+```
+### Question 5
+```{r}
+#No success with previous question and I need previous questions code to answer this one.
+```
